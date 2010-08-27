@@ -16,6 +16,27 @@ BuildRequires:	ghc >= 6.12.3
 BuildRequires:	ghc-prof
 BuildRequires:	zlib-devel
 %requires_eq	ghc
+Provides:	ghc-GLUT
+Provides:	ghc-HTTP
+Provides:	ghc-HUnit
+Provides:	ghc-OpenGL
+Provides:	ghc-QuickCheck
+Provides:	ghc-cgi
+Provides:	ghc-deepseq
+Provides:	ghc-fgl
+Provides:	ghc-haskell-platform
+Provides:	ghc-haskell-src
+Provides:	ghc-html
+Provides:	ghc-mtl
+Provides:	ghc-network
+Provides:	ghc-parallel
+Provides:	ghc-parsec
+Provides:	ghc-regex-base
+Provides:	ghc-regex-compat
+Provides:	ghc-regex-posix
+Provides:	ghc-stm
+Provides:	ghc-xhtml
+Provides:	ghc-zlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		ghcdir		ghc-%(/usr/bin/ghc --numeric-version)
