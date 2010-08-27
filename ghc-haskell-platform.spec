@@ -2,7 +2,7 @@
 Summary:	Comprehensive, robust development environment for programming in Haskell
 Name:		ghc-%{pkgname}
 Version:	2010.2.0.0
-Release:	2
+Release:	3
 License:	BSD
 Group:		Development/Languages
 Source0:	http://hackage.haskell.org/platform/%{version}/%{pkgname}-%{version}.tar.gz
@@ -15,7 +15,7 @@ BuildRequires:	OpenGL-glut-devel
 BuildRequires:	ghc >= 6.12.3
 BuildRequires:	ghc-prof
 BuildRequires:	zlib-devel
-%requires_eq	ghc
+%requires_releq	ghc
 Provides:	ghc-GLUT
 Provides:	ghc-HTTP
 Provides:	ghc-HUnit
