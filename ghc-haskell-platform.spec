@@ -2,7 +2,7 @@
 Summary:	Comprehensive, robust development environment for programming in Haskell
 Name:		ghc-%{pkgname}
 Version:	2010.2.0.0
-Release:	0.1
+Release:	1
 License:	BSD
 Group:		Development/Languages
 Source0:	http://hackage.haskell.org/platform/%{version}/%{pkgname}-%{version}.tar.gz
