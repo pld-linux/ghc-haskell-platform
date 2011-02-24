@@ -2,7 +2,7 @@
 Summary:	Comprehensive, robust development environment for programming in Haskell
 Name:		ghc-%{pkgname}
 Version:	2010.2.0.0
-Release:	6
+Release:	7
 License:	BSD
 Group:		Development/Languages
 Source0:	http://hackage.haskell.org/platform/%{version}/%{pkgname}-%{version}.tar.gz
@@ -88,7 +88,8 @@ install -d $RPM_BUILD_ROOT%{_libdir}/%{ghcdir}/package.conf.d
 
 rm $RPM_BUILD_ROOT%{_bindir}/{alex,cabal,happy}
 rm -f $RPM_BUILD_ROOT%{_bindir}/*-tests
-rm -r $RPM_BUILD_ROOT%{_datadir}/{alex,happy,HUnit}*
+rm -r $RPM_BUILD_ROOT%{_datadir}/{alex,happy}*
+rm -rf $RPM_BUILD_ROOT%{_datadir}/HUnit*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
