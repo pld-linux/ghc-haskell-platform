@@ -2,7 +2,7 @@
 Summary:	Comprehensive, robust development environment for programming in Haskell
 Name:		ghc-%{pkgname}
 Version:	2010.2.0.0
-Release:	7
+Release:	8
 License:	BSD
 Group:		Development/Languages
 Source0:	http://hackage.haskell.org/platform/%{version}/%{pkgname}-%{version}.tar.gz
@@ -16,7 +16,7 @@ BuildRequires:	ghc >= 6.12.3
 BuildRequires:	ghc-prof
 BuildRequires:	zlib-devel
 BuildRequires:	rpmbuild(macros) >= 1.608
-%requires_releq	ghc
+%requires_eq	ghc
 Provides:	ghc-GLUT
 Provides:	ghc-HTTP
 Provides:	ghc-HUnit
@@ -39,6 +39,9 @@ Provides:	ghc-stm
 Provides:	ghc-xhtml
 Provides:	ghc-zlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# debuginfo is not useful for ghc
+%define		_enable_debug_packages	0
 
 %description
 The Haskell Platform is a comprehensive, robust development
