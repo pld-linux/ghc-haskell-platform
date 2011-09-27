@@ -68,7 +68,8 @@ They should be installed when GHC's profiling subsystem is needed.
 %patch0 -p1
 
 %build
-%configure 
+%configure \
+	--enable-unsupported-ghc-version
 
 %{__make} VERBOSE="-v2" \
 	EXTRA_CONFIGURE_OPTS="-v2 \
