@@ -81,8 +81,8 @@ mv syb-0.3.3 packages/
 %configure \
 	--enable-unsupported-ghc-version
 
-%{__make} VERBOSE="-v3" \
-	EXTRA_CONFIGURE_OPTS="-v3 \
+%{__make} VERBOSE="-v2" \
+	EXTRA_CONFIGURE_OPTS="-v2 \
 		--prefix=%{_prefix} \
 		--libdir=%{_libdir} \
 		--libexecdir=%{_libexecdir} \
