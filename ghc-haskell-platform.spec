@@ -1,12 +1,13 @@
 %define		pkgname	haskell-platform
 Summary:	Comprehensive, robust development environment for programming in Haskell
 Name:		ghc-%{pkgname}
-Version:	2010.2.0.0
-Release:	8
+Version:	2011.2.0.1
+Release:	1
 License:	BSD
 Group:		Development/Languages
-Source0:	http://hackage.haskell.org/platform/%{version}/%{pkgname}-%{version}.tar.gz
-# Source0-md5:	9d1dd22a86bf2505591e6375f7dbe18e
+#Source0:	http://hackage.haskell.org/platform/%{version}/%{pkgname}-%{version}.tar.gz
+Source0:	http://lambda.galois.com/hp-tmp/%{version}/%{pkgname}-%{version}.tar.gz
+# Source0-md5:	97fd42f169a426d043368cec342745ef
 Patch0:		%{name}-install.patch
 URL:		http://hackage.haskell.org/platform/
 BuildRequires:	OpenGL-devel
