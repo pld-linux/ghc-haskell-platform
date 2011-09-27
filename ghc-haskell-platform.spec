@@ -2,7 +2,7 @@
 Summary:	Comprehensive, robust development environment for programming in Haskell
 Name:		ghc-%{pkgname}
 Version:	2011.2.0.1
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Languages
 #Source0:	http://hackage.haskell.org/platform/%{version}/%{pkgname}-%{version}.tar.gz
@@ -11,6 +11,10 @@ Source0:	http://lambda.galois.com/hp-tmp/%{version}/%{pkgname}-%{version}.tar.gz
 # TEMP
 Source100:	http://hackage.haskell.org/packages/archive/syb/0.3.3/syb-0.3.3.tar.gz
 # Source100-md5:	4bc2ef44a86c9182f9768c6cc0a96c3a
+Source101:	http://hackage.haskell.org/packages/archive/HTTP/4000.1.2/HTTP-4000.1.2.tar.gz
+# Source101-md5:	0871666457aeabe4ed8ebce0acb424b7
+Source102:	http://hackage.haskell.org/packages/archive/network/2.3.0.5/network-2.3.0.5.tar.gz
+# Source102-md5:	716fbe9e01059582503d2920d2618ef3
 Patch0:		%{name}-install.patch
 Patch1:		%{name}-ghc72.patch
 URL:		http://hackage.haskell.org/platform/
@@ -19,6 +23,8 @@ BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-glut-devel
 BuildRequires:	ghc >= 6.12.3
 BuildRequires:	ghc-prof
+BuildRequires:	ghc-random
+BuildRequires:	ghc-random-prof
 BuildRequires:	zlib-devel
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
@@ -41,6 +47,9 @@ Provides:	ghc-regex-base
 Provides:	ghc-regex-compat
 Provides:	ghc-regex-posix
 Provides:	ghc-stm
+Provides:	ghc-syb
+Provides:	ghc-text
+Provides:	ghc-transformers
 Provides:	ghc-xhtml
 Provides:	ghc-zlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -68,13 +77,15 @@ Compilation System (GHC).
 They should be installed when GHC's profiling subsystem is needed.
 
 %prep
-%setup -q -n %{pkgname}-%{version} -a100
+%setup -q -n %{pkgname}-%{version} -a100 -a101 -a102
 %patch0 -p1
 %patch1 -p1
 
-%{__rm} -r packages/syb-0.3
-mv syb-0.3.3 packages/
-%{__sed} -i -e 's|syb-0.3|syb-0.3.3|g' packages/platform.packages
+%{__rm} -r packages/syb-0.3 packages/HTTP-4000.1.1 packages/network-2.3.0.2
+mv syb-0.3.3 HTTP-4000.1.2 network-2.3.0.5 packages/
+%{__sed} -i -e 's|syb-0.3|syb-0.3.3|g' \
+	-e 's|HTTP-4000.1.1|HTTP-4000.1.2|g' \
+	-e 's|network-2.3.0.2|network-2.3.0.5|g' packages/platform.packages
 
 %build
 
@@ -223,6 +234,11 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{ghcdir}/parsec-*/Text
 %dir %{_libdir}/%{ghcdir}/parsec-*/Text/ParserCombinators
 %dir %{_libdir}/%{ghcdir}/parsec-*/Text/ParserCombinators/Parsec
+%dir %{_libdir}/%{ghcdir}/parsec-*/Text/Parsec
+%dir %{_libdir}/%{ghcdir}/parsec-*/Text/Parsec/ByteString
+%{_libdir}/%{ghcdir}/parsec-*/Text/*.hi
+%{_libdir}/%{ghcdir}/parsec-*/Text/Parsec/*.hi
+%{_libdir}/%{ghcdir}/parsec-*/Text/Parsec/ByteString/*.hi
 %{_libdir}/%{ghcdir}/parsec-*/Text/ParserCombinators/Parsec/*.hi
 %{_libdir}/%{ghcdir}/parsec-*/Text/ParserCombinators/*.hi
 %{_libdir}/%{ghcdir}/parsec-*/libHSparsec-*.a
@@ -233,7 +249,9 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{ghcdir}/network-*/include/HsNetworkConfig.h
 %dir %{_libdir}/%{ghcdir}/network-*/Network
 %dir %{_libdir}/%{ghcdir}/network-*/Network/Socket
+%dir %{_libdir}/%{ghcdir}/network-*/Network/Socket/ByteString
 %{_libdir}/%{ghcdir}/network-*/Network/Socket/*.hi
+%{_libdir}/%{ghcdir}/network-*/Network/Socket/ByteString/*.hi
 %{_libdir}/%{ghcdir}/network-*/Network/*.hi
 %{_libdir}/%{ghcdir}/network-*/*.hi
 %{_libdir}/%{ghcdir}/network-*/libHSnetwork-*.a
@@ -310,83 +328,153 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{ghcdir}/zlib-*/HSzlib-*.o
 %exclude %{_libdir}/%{ghcdir}/*/*_p.a
 %{_libdir}/%{ghcdir}/package.conf.d/*.conf
+%dir %{_libdir}/%{ghcdir}/syb-*
+%dir %{_libdir}/%{ghcdir}/syb-*/Data
+%dir %{_libdir}/%{ghcdir}/syb-*/Data/Generics
+%dir %{_libdir}/%{ghcdir}/syb-*/Generics
+%dir %{_libdir}/%{ghcdir}/syb-*/Generics/SYB
+%{_libdir}/%{ghcdir}/syb-*/Data/*.hi
+%{_libdir}/%{ghcdir}/syb-*/Data/Generics/*.hi
+%{_libdir}/%{ghcdir}/syb-*/Generics/*.hi
+%{_libdir}/%{ghcdir}/syb-*/Generics/SYB/*.hi
+%{_libdir}/%{ghcdir}/syb-*/HSsyb-*.o
+%{_libdir}/%{ghcdir}/syb-*/libHSsyb-*.a
+%dir %{_libdir}/%{ghcdir}/text-*
+%dir %{_libdir}/%{ghcdir}/text-*/Data
+%dir %{_libdir}/%{ghcdir}/text-*/Data/Text
+%dir %{_libdir}/%{ghcdir}/text-*/Data/Text/Encoding
+%dir %{_libdir}/%{ghcdir}/text-*/Data/Text/Encoding/Fusion
+%dir %{_libdir}/%{ghcdir}/text-*/Data/Text/Fusion
+%dir %{_libdir}/%{ghcdir}/text-*/Data/Text/IO
+%dir %{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy
+%dir %{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Encoding
+%{_libdir}/%{ghcdir}/text-*/Data/*.hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/*.hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Encoding/*.hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Encoding/Fusion/*.hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Fusion/*.hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/IO/*.hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/*.hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Encoding/*.hi
+%{_libdir}/%{ghcdir}/text-*/HStext-*.o
+%{_libdir}/%{ghcdir}/text-*/libHStext-*.a
+%dir %{_libdir}/%{ghcdir}/transformers-*
+%dir %{_libdir}/%{ghcdir}/transformers-*/Control
+%dir %{_libdir}/%{ghcdir}/transformers-*/Control/Monad
+%dir %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/IO
+%dir %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans
+%dir %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/RWS
+%dir %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/State
+%dir %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/Writer
+%dir %{_libdir}/%{ghcdir}/transformers-*/Data
+%dir %{_libdir}/%{ghcdir}/transformers-*/Data/Functor
+%{_libdir}/%{ghcdir}/transformers-*/Control/Monad/IO/*.hi
+%{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/*.hi
+%{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/RWS/*.hi
+%{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/State/*.hi
+%{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/Writer/*.hi
+%{_libdir}/%{ghcdir}/transformers-*/Data/Functor/*.hi
+%{_libdir}/%{ghcdir}/transformers-*/HStransformers-*.o
+%{_libdir}/%{ghcdir}/transformers-*/libHStransformers-*.a
 
 %files prof
 %defattr(644,root,root,755)
-%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/Cont/*.p_hi
-%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/Error/*.p_hi
-%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/RWS/*.p_hi
-%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/Reader/*.p_hi
-%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/State/*.p_hi
-%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/Writer/*.p_hi
-%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/*.p_hi
-%{_libdir}/%{ghcdir}/mtl-*/libHSmtl-*_p.a
+%{_libdir}/%{ghcdir}/cgi-*/libHScgi-*_p.a
+%{_libdir}/%{ghcdir}/cgi-*/Network/CGI/*.p_hi
+%{_libdir}/%{ghcdir}/cgi-*/Network/*.p_hi
+%{_libdir}/%{ghcdir}/deepseq-*/Control/*.p_hi
+%{_libdir}/%{ghcdir}/deepseq-*/libHSdeepseq-*_p.a
+%{_libdir}/%{ghcdir}/fgl-*/Data/Graph/Inductive/Internal/*.p_hi
+%{_libdir}/%{ghcdir}/fgl-*/Data/Graph/Inductive/Monad/*.p_hi
+%{_libdir}/%{ghcdir}/fgl-*/Data/Graph/Inductive/*.p_hi
+%{_libdir}/%{ghcdir}/fgl-*/Data/Graph/Inductive/Query/*.p_hi
+%{_libdir}/%{ghcdir}/fgl-*/Data/Graph/*.p_hi
+%{_libdir}/%{ghcdir}/fgl-*/libHSfgl-*_p.a
+%{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT/Callbacks/*.p_hi
+%{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT/*.p_hi
+%{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/*.p_hi
+%{_libdir}/%{ghcdir}/GLUT-*/libHSGLUT-*_p.a
+%{_libdir}/%{ghcdir}/haskell-src-*/Language/Haskell/*.p_hi
+%{_libdir}/%{ghcdir}/haskell-src-*/libHShaskell-src-*_p.a
+%{_libdir}/%{ghcdir}/html-*/libHShtml-*_p.a
+%{_libdir}/%{ghcdir}/html-*/Text/Html/*.p_hi
+%{_libdir}/%{ghcdir}/html-*/Text/*.p_hi
+%{_libdir}/%{ghcdir}/HTTP-*/libHSHTTP-*_p.a
+%{_libdir}/%{ghcdir}/HTTP-*/Network/HTTP/*.p_hi
+%{_libdir}/%{ghcdir}/HTTP-*/Network/*.p_hi
+%{_libdir}/%{ghcdir}/HUnit-*/libHSHUnit-*_p.a
 %{_libdir}/%{ghcdir}/HUnit-*/Test/HUnit/*.p_hi
 %{_libdir}/%{ghcdir}/HUnit-*/Test/*.p_hi
-%{_libdir}/%{ghcdir}/HUnit-*/libHSHUnit-*_p.a
+%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/Cont/*.p_hi
+%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/Error/*.p_hi
+%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/*.p_hi
+%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/Reader/*.p_hi
+%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/RWS/*.p_hi
+%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/State/*.p_hi
+%{_libdir}/%{ghcdir}/mtl-*/Control/Monad/Writer/*.p_hi
+%{_libdir}/%{ghcdir}/mtl-*/libHSmtl-*_p.a
+%{_libdir}/%{ghcdir}/network-*/libHSnetwork-*_p.a
+%{_libdir}/%{ghcdir}/network-*/Network/*.p_hi
+%{_libdir}/%{ghcdir}/network-*/Network/Socket/ByteString/*.p_hi
+%{_libdir}/%{ghcdir}/network-*/Network/Socket/*.p_hi
+%{_libdir}/%{ghcdir}/network-*/*.p_hi
+%{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/*.p_hi
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/PixelRectangles/*.p_hi
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/Texturing/*.p_hi
-%{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/*.p_hi
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GLU/*.p_hi
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/*.p_hi
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/*.p_hi
 %{_libdir}/%{ghcdir}/OpenGL-*/libHSOpenGL-*_p.a
-%{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT/Callbacks/*.p_hi
-%{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT/*.p_hi
-%{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/*.p_hi
-%{_libdir}/%{ghcdir}/deepseq-*/Control/*.p_hi
-%{_libdir}/%{ghcdir}/deepseq-*/libHSdeepseq-*_p.a
-%{_libdir}/%{ghcdir}/haskell-src-*/Language/Haskell/*.p_hi
-%{_libdir}/%{ghcdir}/haskell-src-*/libHShaskell-src-*_p.a
-%{_libdir}/%{ghcdir}/html-*/Text/Html/*.p_hi
-%{_libdir}/%{ghcdir}/html-*/Text/*.p_hi
-%{_libdir}/%{ghcdir}/html-*/libHShtml-*_p.a
-%{_libdir}/%{ghcdir}/QuickCheck-*/Test/QuickCheck/*.p_hi
-%{_libdir}/%{ghcdir}/QuickCheck-*/Test/*.p_hi
-%{_libdir}/%{ghcdir}/QuickCheck-*/libHSQuickCheck-*_p.a
-%{_libdir}/%{ghcdir}/fgl-*/Data/Graph/Inductive/Internal/*.p_hi
-%{_libdir}/%{ghcdir}/fgl-*/Data/Graph/Inductive/Monad/*.p_hi
-%{_libdir}/%{ghcdir}/fgl-*/Data/Graph/Inductive/Query/*.p_hi
-%{_libdir}/%{ghcdir}/fgl-*/Data/Graph/Inductive/*.p_hi
-%{_libdir}/%{ghcdir}/fgl-*/Data/Graph/*.p_hi
-%{_libdir}/%{ghcdir}/fgl-*/libHSfgl-*_p.a
 %{_libdir}/%{ghcdir}/parallel-*/Control/Parallel/*.p_hi
 %{_libdir}/%{ghcdir}/parallel-*/Control/*.p_hi
 %{_libdir}/%{ghcdir}/parallel-*/libHSparallel-*_p.a
-%{_libdir}/%{ghcdir}/GLUT-*/libHSGLUT-*_p.a
+%{_libdir}/%{ghcdir}/parsec-*/libHSparsec-*_p.a
+%{_libdir}/%{ghcdir}/parsec-*/Text/Parsec/ByteString/*.p_hi
+%{_libdir}/%{ghcdir}/parsec-*/Text/Parsec/*.p_hi
 %{_libdir}/%{ghcdir}/parsec-*/Text/ParserCombinators/Parsec/*.p_hi
 %{_libdir}/%{ghcdir}/parsec-*/Text/ParserCombinators/*.p_hi
-%{_libdir}/%{ghcdir}/parsec-*/libHSparsec-*_p.a
-%{_libdir}/%{ghcdir}/network-*/Network/Socket/*.p_hi
-%{_libdir}/%{ghcdir}/network-*/Network/*.p_hi
-%{_libdir}/%{ghcdir}/network-*/*.p_hi
-%{_libdir}/%{ghcdir}/network-*/libHSnetwork-*_p.a
-%{_libdir}/%{ghcdir}/HTTP-*/Network/HTTP/*.p_hi
-%{_libdir}/%{ghcdir}/HTTP-*/Network/*.p_hi
-%{_libdir}/%{ghcdir}/HTTP-*/libHSHTTP-*_p.a
+%{_libdir}/%{ghcdir}/parsec-*/Text/*.p_hi
+%{_libdir}/%{ghcdir}/QuickCheck-*/libHSQuickCheck-*_p.a
+%{_libdir}/%{ghcdir}/QuickCheck-*/Test/*.p_hi
+%{_libdir}/%{ghcdir}/QuickCheck-*/Test/QuickCheck/*.p_hi
+%{_libdir}/%{ghcdir}/regex-base-*/libHSregex-base-*_p.a
 %{_libdir}/%{ghcdir}/regex-base-*/Text/Regex/Base/*.p_hi
 %{_libdir}/%{ghcdir}/regex-base-*/Text/Regex/*.p_hi
-%{_libdir}/%{ghcdir}/regex-base-*/libHSregex-base-*_p.a
+%{_libdir}/%{ghcdir}/regex-compat-*/libHSregex-compat-*_p.a
+%{_libdir}/%{ghcdir}/regex-compat-*/Text/*.p_hi
+%{_libdir}/%{ghcdir}/regex-posix-*/libHSregex-posix-*_p.a
+%{_libdir}/%{ghcdir}/regex-posix-*/Text/Regex/*.p_hi
 %{_libdir}/%{ghcdir}/regex-posix-*/Text/Regex/Posix/ByteString/*.p_hi
 %{_libdir}/%{ghcdir}/regex-posix-*/Text/Regex/Posix/*.p_hi
-%{_libdir}/%{ghcdir}/regex-posix-*/Text/Regex/*.p_hi
-%{_libdir}/%{ghcdir}/regex-posix-*/libHSregex-posix-*_p.a
-%{_libdir}/%{ghcdir}/regex-compat-*/Text/*.p_hi
-%{_libdir}/%{ghcdir}/regex-compat-*/libHSregex-compat-*_p.a
-%{_libdir}/%{ghcdir}/stm-*/Control/Concurrent/STM/*.p_hi
 %{_libdir}/%{ghcdir}/stm-*/Control/Concurrent/*.p_hi
+%{_libdir}/%{ghcdir}/stm-*/Control/Concurrent/STM/*.p_hi
 %{_libdir}/%{ghcdir}/stm-*/Control/Monad/*.p_hi
 %{_libdir}/%{ghcdir}/stm-*/Control/Sequential/*.p_hi
 %{_libdir}/%{ghcdir}/stm-*/libHSstm-*_p.a
-%{_libdir}/%{ghcdir}/xhtml-*/Text/XHtml/Strict/*.p_hi
-%{_libdir}/%{ghcdir}/xhtml-*/Text/XHtml/Frameset/*.p_hi
-%{_libdir}/%{ghcdir}/xhtml-*/Text/XHtml/Transitional/*.p_hi
-%{_libdir}/%{ghcdir}/xhtml-*/Text/XHtml/*.p_hi
-%{_libdir}/%{ghcdir}/xhtml-*/Text/*.p_hi
+%{_libdir}/%{ghcdir}/syb-*/Data/Generics/*.p_hi
+%{_libdir}/%{ghcdir}/syb-*/Data/*.p_hi
+%{_libdir}/%{ghcdir}/syb-*/Generics/*.p_hi
+%{_libdir}/%{ghcdir}/syb-*/Generics/SYB/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/Data/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Encoding/Fusion/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Encoding/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Fusion/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/IO/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Encoding/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/*.p_hi
+%{_libdir}/%{ghcdir}/transformers-*/Control/Monad/IO/*.p_hi
+%{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/*.p_hi
+%{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/RWS/*.p_hi
+%{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/State/*.p_hi
+%{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/Writer/*.p_hi
+%{_libdir}/%{ghcdir}/transformers-*/Data/Functor/*.p_hi
 %{_libdir}/%{ghcdir}/xhtml-*/libHSxhtml-*_p.a
-%{_libdir}/%{ghcdir}/cgi-*/Network/CGI/*.p_hi
-%{_libdir}/%{ghcdir}/cgi-*/Network/*.p_hi
-%{_libdir}/%{ghcdir}/cgi-*/libHScgi-*_p.a
-%{_libdir}/%{ghcdir}/zlib-*/Codec/Compression/Zlib/*.p_hi
+%{_libdir}/%{ghcdir}/xhtml-*/Text/*.p_hi
+%{_libdir}/%{ghcdir}/xhtml-*/Text/XHtml/Frameset/*.p_hi
+%{_libdir}/%{ghcdir}/xhtml-*/Text/XHtml/*.p_hi
+%{_libdir}/%{ghcdir}/xhtml-*/Text/XHtml/Strict/*.p_hi
+%{_libdir}/%{ghcdir}/xhtml-*/Text/XHtml/Transitional/*.p_hi
 %{_libdir}/%{ghcdir}/zlib-*/Codec/Compression/*.p_hi
+%{_libdir}/%{ghcdir}/zlib-*/Codec/Compression/Zlib/*.p_hi
 %{_libdir}/%{ghcdir}/zlib-*/libHSzlib-*_p.a
