@@ -8,7 +8,11 @@ Group:		Development/Languages
 #Source0:	http://hackage.haskell.org/platform/%{version}/%{pkgname}-%{version}.tar.gz
 Source0:	http://lambda.galois.com/hp-tmp/%{version}/%{pkgname}-%{version}.tar.gz
 # Source0-md5:	97fd42f169a426d043368cec342745ef
+# TEMP
+Source100:	http://hackage.haskell.org/packages/archive/syb/0.3.3/syb-0.3.3.tar.gz
+# Source100-md5:	4bc2ef44a86c9182f9768c6cc0a96c3a
 Patch0:		%{name}-install.patch
+Patch1:		%{name}-ghc72.patch
 URL:		http://hackage.haskell.org/platform/
 BuildRequires:	OpenGL-devel
 BuildRequires:	OpenGL-GLU-devel
@@ -64,15 +68,21 @@ Compilation System (GHC).
 They should be installed when GHC's profiling subsystem is needed.
 
 %prep
-%setup -q -n %{pkgname}-%{version}
+%setup -q -n %{pkgname}-%{version} -a100
 %patch0 -p1
+%patch1 -p1
+
+%{__rm} -r packages/syb-0.3
+mv syb-0.3.3 packages/
+%{__sed} -i -e 's|syb-0.3|syb-0.3.3|g' packages/platform.packages
 
 %build
+
 %configure \
 	--enable-unsupported-ghc-version
 
-%{__make} VERBOSE="-v2" \
-	EXTRA_CONFIGURE_OPTS="-v2 \
+%{__make} VERBOSE="-v3" \
+	EXTRA_CONFIGURE_OPTS="-v3 \
 		--prefix=%{_prefix} \
 		--libdir=%{_libdir} \
 		--libexecdir=%{_libexecdir} \

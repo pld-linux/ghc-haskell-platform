@@ -1,0 +1,32 @@
+--- a/packages/alex-2.3.5/alex.cabal
++++ b/packages/alex-2.3.5/alex.cabal
+@@ -72,7 +72,7 @@ executable alex
+ 
+   build-depends: base < 5
+ 
+-  extensions: CPP
++  extensions: CPP, BangPatterns
+   ghc-options: -Wall
+   other-modules:
+         AbsSyn
+--- a/packages/alex-2.3.5/doc/configure.ac
++++ b/packages/alex-2.3.5/doc/configure.ac
+@@ -9,5 +9,5 @@ FP_DIR_DOCBOOK_XSL([/usr/share/xml/docbook/stylesheet/nwalsh/current /usr/share/
+ 
+ AC_PATH_PROG(DbLatexCmd,dblatex)
+ 
+-AC_CONFIG_FILES([config.mk])
++AC_CONFIG_FILES([config.mk alex.1])
+ AC_OUTPUT
+--- haskell-platform-2011.2.0.1/packages/haskell-src-1.0.1.4/haskell-src.cabal~	2011-04-03 23:23:56.000000000 +0200
++++ haskell-platform-2011.2.0.1/packages/haskell-src-1.0.1.4/haskell-src.cabal	2011-09-27 20:12:10.939000793 +0200
+@@ -32,8 +32,7 @@
+   if flag(split-base)
+     build-depends:      base >= 4 && < 5, syb, pretty, array
+   else
+-    build-depends:      base < 3
+-  build-depends: haskell98
++    build-depends:      base < 3, haskell98
+   -- The dependency on Haskell 98 is only because
+   -- Happy generates a parser that imports Array
+   extensions:   CPP
