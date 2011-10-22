@@ -1,8 +1,12 @@
+#
+# TODO:
+#	- package cabal separately, same as alex and happy
+#
 %define		pkgname	haskell-platform
 Summary:	Comprehensive, robust development environment for programming in Haskell
 Name:		ghc-%{pkgname}
 Version:	2011.2.0.1
-Release:	3
+Release:	4
 License:	BSD
 Group:		Development/Languages
 #Source0:	http://hackage.haskell.org/platform/%{version}/%{pkgname}-%{version}.tar.gz
@@ -111,7 +115,7 @@ install -d $RPM_BUILD_ROOT%{_libdir}/%{ghcdir}/package.conf.d
 %{__rm} -rf %{name}-%{version}-doc
 cp -a $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} %{name}-%{version}-doc
 
-%{__rm} $RPM_BUILD_ROOT%{_bindir}/{alex,cabal,happy}
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/{alex,happy}
 %{__rm} $RPM_BUILD_ROOT%{_bindir}/*-tests
 %{__rm} -r $RPM_BUILD_ROOT%{_datadir}/{alex,happy}*
 %{__rm} -r $RPM_BUILD_ROOT%{_datadir}/HUnit*
@@ -128,6 +132,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc %{name}-%{version}-doc/html
+%attr(755,root,root) %{_bindir}/cabal
 %dir %{_libdir}/%{ghcdir}/mtl-*
 %dir %{_libdir}/%{ghcdir}/mtl-*/Control
 %dir %{_libdir}/%{ghcdir}/mtl-*/Control/Monad
