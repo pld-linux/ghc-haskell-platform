@@ -2,7 +2,7 @@
 Summary:	Comprehensive, robust development environment for programming in Haskell
 Name:		ghc-%{pkgname}
 Version:	2011.2.0.1
-Release:	2
+Release:	3
 License:	BSD
 Group:		Development/Languages
 #Source0:	http://hackage.haskell.org/platform/%{version}/%{pkgname}-%{version}.tar.gz
@@ -107,15 +107,14 @@ install -d $RPM_BUILD_ROOT%{_libdir}/%{ghcdir}/package.conf.d
 	ghcdir=%{ghcdir} \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# apparently there is no documentation O.o
 # work around automatic haddock docs installation
-#rm -rf %{name}-%{version}-doc
-#cp -a $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} %{name}-%{version}-doc
+%{__rm} -rf %{name}-%{version}-doc
+cp -a $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} %{name}-%{version}-doc
 
-rm $RPM_BUILD_ROOT%{_bindir}/{alex,cabal,happy}
-rm -f $RPM_BUILD_ROOT%{_bindir}/*-tests
-rm -r $RPM_BUILD_ROOT%{_datadir}/{alex,happy}*
-rm -rf $RPM_BUILD_ROOT%{_datadir}/HUnit*
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/{alex,cabal,happy}
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/*-tests
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/{alex,happy}*
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/HUnit*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -128,7 +127,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-#doc %{name}-%{version}-doc/html
+%doc %{name}-%{version}-doc/html
 %dir %{_libdir}/%{ghcdir}/mtl-*
 %dir %{_libdir}/%{ghcdir}/mtl-*/Control
 %dir %{_libdir}/%{ghcdir}/mtl-*/Control/Monad
