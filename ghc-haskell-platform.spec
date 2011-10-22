@@ -6,7 +6,7 @@
 Summary:	Comprehensive, robust development environment for programming in Haskell
 Name:		ghc-%{pkgname}
 Version:	2011.2.0.1
-Release:	4
+Release:	5
 License:	BSD
 Group:		Development/Languages
 #Source0:	http://hackage.haskell.org/platform/%{version}/%{pkgname}-%{version}.tar.gz
@@ -60,6 +60,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
 %define		_enable_debug_packages	0
+
+# docs contai html files and haskell package definitions that should not be compressed
+%define		no_install_post_compress_docs	1
 
 %description
 The Haskell Platform is a comprehensive, robust development
