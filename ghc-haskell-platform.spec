@@ -32,30 +32,30 @@ BuildRequires:	ghc-random-prof
 BuildRequires:	zlib-devel
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
-Provides:	ghc-GLUT
-Provides:	ghc-HTTP
-Provides:	ghc-HUnit
-Provides:	ghc-OpenGL
-Provides:	ghc-QuickCheck
-Provides:	ghc-cgi
-Provides:	ghc-deepseq
-Provides:	ghc-fgl
+Provides:	ghc-GLUT = 2.1.2.1
+Provides:	ghc-HTTP = 4000.1.2
+Provides:	ghc-HUnit = 1.2.2.3
+Provides:	ghc-OpenGL = 2.2.3.0
+Provides:	ghc-QuickCheck = 2.4.0.1
+Provides:	ghc-cgi = 3001.1.7.4
+Provides:	ghc-deepseq = 1.1.0.2
+Provides:	ghc-fgl = 5.4.2.3
 Provides:	ghc-haskell-platform
-Provides:	ghc-haskell-src
-Provides:	ghc-html
-Provides:	ghc-mtl
-Provides:	ghc-network
-Provides:	ghc-parallel
-Provides:	ghc-parsec
-Provides:	ghc-regex-base
-Provides:	ghc-regex-compat
-Provides:	ghc-regex-posix
-Provides:	ghc-stm
-Provides:	ghc-syb
-Provides:	ghc-text
-Provides:	ghc-transformers
-Provides:	ghc-xhtml
-Provides:	ghc-zlib
+Provides:	ghc-haskell-src = 1.0.1.4
+Provides:	ghc-html = 1.0.1.2
+Provides:	ghc-mtl = 2.0.1.0
+Provides:	ghc-network = 2.3.0.5
+Provides:	ghc-parallel = 3.1.0.1
+Provides:	ghc-parsec = 3.1.1
+Provides:	ghc-regex-base = 0.93.2
+Provides:	ghc-regex-compat 0.93.1
+Provides:	ghc-regex-posix = 0.94.4
+Provides:	ghc-stm = 2.2.0.1
+Provides:	ghc-syb = 0.3.3
+Provides:	ghc-text = 0.11.0.6
+Provides:	ghc-transformers = 0.2.2.0
+Provides:	ghc-xhtml = 3000.2.0.1
+Provides:	ghc-zlib = 0.5.3.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
