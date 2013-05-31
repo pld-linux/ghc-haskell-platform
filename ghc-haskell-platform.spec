@@ -5,57 +5,57 @@
 %define		pkgname	haskell-platform
 Summary:	Comprehensive, robust development environment for programming in Haskell
 Name:		ghc-%{pkgname}
-Version:	2011.2.0.1
-Release:	6
+Version:	2013.2.0.0
+Release:	1
 License:	BSD
 Group:		Development/Languages
-#Source0:	http://hackage.haskell.org/platform/%{version}/%{pkgname}-%{version}.tar.gz
-Source0:	http://lambda.galois.com/hp-tmp/%{version}/%{pkgname}-%{version}.tar.gz
-# Source0-md5:	97fd42f169a426d043368cec342745ef
-# TEMP
-Source100:	http://hackage.haskell.org/packages/archive/syb/0.3.3/syb-0.3.3.tar.gz
-# Source100-md5:	4bc2ef44a86c9182f9768c6cc0a96c3a
-Source101:	http://hackage.haskell.org/packages/archive/HTTP/4000.1.2/HTTP-4000.1.2.tar.gz
-# Source101-md5:	0871666457aeabe4ed8ebce0acb424b7
-Source102:	http://hackage.haskell.org/packages/archive/network/2.3.0.5/network-2.3.0.5.tar.gz
-# Source102-md5:	716fbe9e01059582503d2920d2618ef3
+Source0:	http://lambda.haskell.org/platform/download/%{version}/%{pkgname}-%{version}.tar.gz
+# Source0-md5:	36d02a889ad57a6345b167f5c7a6c164
 Patch0:		%{name}-install.patch
-Patch1:		%{name}-ghc72.patch
 URL:		http://hackage.haskell.org/platform/
 BuildRequires:	OpenGL-devel
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-glut-devel
-BuildRequires:	ghc >= 6.12.3
+BuildRequires:	bash
+BuildRequires:	ghc >= 7.6.2
 BuildRequires:	ghc-prof
-BuildRequires:	ghc-random
-BuildRequires:	ghc-random-prof
+BuildRequires:	hscolour >= 1.8
 BuildRequires:	zlib-devel
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
-Provides:	ghc-GLUT = 2.1.2.1
-Provides:	ghc-HTTP = 4000.1.2
-Provides:	ghc-HUnit = 1.2.2.3
-Provides:	ghc-OpenGL = 2.2.3.0
-Provides:	ghc-QuickCheck = 2.4.0.1
-Provides:	ghc-cgi = 3001.1.7.4
-Provides:	ghc-deepseq = 1.1.0.2
-Provides:	ghc-fgl = 5.4.2.3
-Provides:	ghc-haskell-platform
-Provides:	ghc-haskell-src = 1.0.1.4
+# http://www.haskell.org/platform/changelog.html
+Provides:	ghc-GLUT = 2.4.0.0
+Provides:	ghc-GLURaw = 1.3.0.0
+Provides:	ghc-HTTP = 4000.2.8
+Provides:	ghc-HUnit = 1.2.5.2
+Provides:	ghc-OpenGL = 2.8.0.0
+Provides:	ghc-OpenGLRaw = 1.3.0.0
+Provides:	ghc-QuickCheck = 2.6
+Provides:	ghc-async = 2.0.1.4
+Provides:	ghc-attoparsec = 0.10.4.0
+Provides:	ghc-case-insensitive = 1.0.0.1
+Provides:	ghc-cgi = 3001.1.7.5
+Provides:	ghc-fgl = 5.4.2.4
+Provides:	ghc-hashable = 1.1.2.5
+Provides:	ghc-haskell-src = 1.0.1.5
 Provides:	ghc-html = 1.0.1.2
-Provides:	ghc-mtl = 2.0.1.0
-Provides:	ghc-network = 2.3.0.5
-Provides:	ghc-parallel = 3.1.0.1
-Provides:	ghc-parsec = 3.1.1
+Provides:	ghc-mtl = 2.1.2
+Provides:	ghc-network = 2.4.1.2
+Provides:	ghc-parallel = 3.2.0.3
+Provides:	ghc-parsec = 3.1.3
+Provides:	ghc-random = 1.0.1.1
 Provides:	ghc-regex-base = 0.93.2
-Provides:	ghc-regex-compat 0.93.1
-Provides:	ghc-regex-posix = 0.94.4
-Provides:	ghc-stm = 2.2.0.1
-Provides:	ghc-syb = 0.3.3
-Provides:	ghc-text = 0.11.0.6
-Provides:	ghc-transformers = 0.2.2.0
-Provides:	ghc-xhtml = 3000.2.0.1
-Provides:	ghc-zlib = 0.5.3.1
+Provides:	ghc-regex-compat = 0.95.1
+Provides:	ghc-regex-posix = 0.95.2
+Provides:	ghc-split = 0.2.2
+Provides:	ghc-stm = 2.4.2
+Provides:	ghc-syb = 0.4.0
+Provides:	ghc-text = 0.11.3.1
+Provides:	ghc-transformers = 0.3.0.0
+Provides:	ghc-unordered-containers = 0.2.3.0
+Provides:	ghc-vector = 0.10.0.1
+Provides:	ghc-xhtml = 3000.2.1
+Provides:	ghc-zlib = 0.5.4.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
@@ -84,20 +84,13 @@ Compilation System (GHC).
 They should be installed when GHC's profiling subsystem is needed.
 
 %prep
-%setup -q -n %{pkgname}-%{version} -a100 -a101 -a102
+%setup -q -n %{pkgname}-%{version}
 %patch0 -p1
-%patch1 -p1
 
-%{__rm} -r packages/syb-0.3 packages/HTTP-4000.1.1 packages/network-2.3.0.2
-mv syb-0.3.3 HTTP-4000.1.2 network-2.3.0.5 packages/
-%{__sed} -i -e 's|syb-0.3|syb-0.3.3|g' \
-	-e 's|HTTP-4000.1.1|HTTP-4000.1.2|g' \
-	-e 's|network-2.3.0.2|network-2.3.0.5|g' packages/platform.packages
+%{__sed} -i -e 's|/bin/sh|/bin/bash|' scripts/build.sh
 
 %build
-
-%configure \
-	--enable-unsupported-ghc-version
+%configure
 
 %{__make} VERBOSE="-v2" \
 	EXTRA_CONFIGURE_OPTS="-v2 \
@@ -117,9 +110,9 @@ install -d $RPM_BUILD_ROOT%{_libdir}/%{ghcdir}/package.conf.d
 # work around automatic haddock docs installation
 %{__rm} -rf %{name}-%{version}-doc
 cp -a $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} %{name}-%{version}-doc
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}
 
 %{__rm} $RPM_BUILD_ROOT%{_bindir}/{alex,happy}
-%{__rm} $RPM_BUILD_ROOT%{_bindir}/*-tests
 %{__rm} -r $RPM_BUILD_ROOT%{_datadir}/{alex,happy}*
 %{__rm} -r $RPM_BUILD_ROOT%{_datadir}/HUnit*
 
@@ -162,40 +155,67 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{ghcdir}/HUnit-*/libHSHUnit-*.a
 %{_libdir}/%{ghcdir}/HUnit-*/HSHUnit-*.o
 %dir %{_libdir}/%{ghcdir}/OpenGL-*
-%dir %{_libdir}/%{ghcdir}/OpenGL-*/include
-%dir %{_libdir}/%{ghcdir}/OpenGL-*/include/HsOpenGL.h
 %dir %{_libdir}/%{ghcdir}/OpenGL-*/Graphics
 %dir %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering
 %dir %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL
 %dir %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL
+%dir %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/FramebufferObjects
+%dir %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/QueryUtils
+%dir %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/Shaders
 %dir %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/PixelRectangles
-%{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/PixelRectangles/*.hi
 %dir %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/Texturing
+%dir %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GLU
+%{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/FramebufferObjects/*.hi
+%{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/QueryUtils/*.hi
+%{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/Shaders/*.hi
+%{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/PixelRectangles/*.hi
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/Texturing/*.hi
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/*.hi
-%dir %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GLU
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GLU/*.hi
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/*.hi
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/*.hi
 %{_libdir}/%{ghcdir}/OpenGL-*/libHSOpenGL-*.a
 %{_libdir}/%{ghcdir}/OpenGL-*/HSOpenGL-*.o
+%dir %{_libdir}/%{ghcdir}/OpenGLRaw-*
+%dir %{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics
+%dir %{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering
+%dir %{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL
+%dir %{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw
+%dir %{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/ARB
+%dir %{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/ARB/Compatibility
+%dir %{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/Core31
+%dir %{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/EXT
+%dir %{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/NV
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/*.hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/*.hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/ARB/*.hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/ARB/Compatibility/*.hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/Core31/*.hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/EXT/*.hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/NV/*.hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/HSOpenGLRaw-*.o
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/libHSOpenGLRaw-*.a
+%dir %{_libdir}/%{ghcdir}/GLURaw-*
+%dir %{_libdir}/%{ghcdir}/GLURaw-*/Graphics
+%dir %{_libdir}/%{ghcdir}/GLURaw-*/Graphics/Rendering
+%dir %{_libdir}/%{ghcdir}/GLURaw-*/Graphics/Rendering/GLU
+%dir %{_libdir}/%{ghcdir}/GLURaw-*/Graphics/Rendering/GLU/Raw
+%{_libdir}/%{ghcdir}/GLURaw-*/Graphics/Rendering/GLU/*.hi
+%{_libdir}/%{ghcdir}/GLURaw-*/Graphics/Rendering/GLU/Raw/*.hi
+%{_libdir}/%{ghcdir}/GLURaw-*/HSGLURaw-*.o
+%{_libdir}/%{ghcdir}/GLURaw-*/libHSGLURaw-*.a
 %dir %{_libdir}/%{ghcdir}/GLUT-*
-%dir %{_libdir}/%{ghcdir}/GLUT-*/include
-%dir %{_libdir}/%{ghcdir}/GLUT-*/include/HsGLUT.h
 %dir %{_libdir}/%{ghcdir}/GLUT-*/Graphics
 %dir %{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI
 %dir %{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT
 %dir %{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT/Callbacks
+%dir %{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT/Raw
+%{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT/Raw/*.hi
 %{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT/Callbacks/*.hi
 %{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT/*.hi
 %{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/*.hi
 %{_libdir}/%{ghcdir}/GLUT-*/libHSGLUT-*.a
 %{_libdir}/%{ghcdir}/GLUT-*/HSGLUT-*.o
-%dir %{_libdir}/%{ghcdir}/deepseq-*
-%dir %{_libdir}/%{ghcdir}/deepseq-*/Control
-%{_libdir}/%{ghcdir}/deepseq-*/Control/*.hi
-%{_libdir}/%{ghcdir}/deepseq-*/libHSdeepseq-*.a
-%{_libdir}/%{ghcdir}/deepseq-*/HSdeepseq-*.o
 %dir %{_libdir}/%{ghcdir}/haskell-src-*
 %dir %{_libdir}/%{ghcdir}/haskell-src-*/Language
 %dir %{_libdir}/%{ghcdir}/haskell-src-*/Language/Haskell
@@ -243,9 +263,11 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{ghcdir}/parsec-*/Text/ParserCombinators/Parsec
 %dir %{_libdir}/%{ghcdir}/parsec-*/Text/Parsec
 %dir %{_libdir}/%{ghcdir}/parsec-*/Text/Parsec/ByteString
+%dir %{_libdir}/%{ghcdir}/parsec-*/Text/Parsec/Text
 %{_libdir}/%{ghcdir}/parsec-*/Text/*.hi
 %{_libdir}/%{ghcdir}/parsec-*/Text/Parsec/*.hi
 %{_libdir}/%{ghcdir}/parsec-*/Text/Parsec/ByteString/*.hi
+%{_libdir}/%{ghcdir}/parsec-*/Text/Parsec/Text/*.hi
 %{_libdir}/%{ghcdir}/parsec-*/Text/ParserCombinators/Parsec/*.hi
 %{_libdir}/%{ghcdir}/parsec-*/Text/ParserCombinators/*.hi
 %{_libdir}/%{ghcdir}/parsec-*/libHSparsec-*.a
@@ -268,6 +290,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{ghcdir}/HTTP-*/Network/HTTP
 %{_libdir}/%{ghcdir}/HTTP-*/Network/HTTP/*.hi
 %{_libdir}/%{ghcdir}/HTTP-*/Network/*.hi
+%{_libdir}/%{ghcdir}/HTTP-*/*.hi
 %{_libdir}/%{ghcdir}/HTTP-*/libHSHTTP-*.a
 %{_libdir}/%{ghcdir}/HTTP-*/HSHTTP-*.o
 %dir %{_libdir}/%{ghcdir}/regex-base-*
@@ -354,7 +377,11 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{ghcdir}/text-*/Data/Text/Fusion
 %dir %{_libdir}/%{ghcdir}/text-*/Data/Text/IO
 %dir %{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy
+%dir %{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Builder
+%dir %{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Builder/Int
+%dir %{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Builder/RealFloat
 %dir %{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Encoding
+%dir %{_libdir}/%{ghcdir}/text-*/Data/Text/Unsafe
 %{_libdir}/%{ghcdir}/text-*/Data/*.hi
 %{_libdir}/%{ghcdir}/text-*/Data/Text/*.hi
 %{_libdir}/%{ghcdir}/text-*/Data/Text/Encoding/*.hi
@@ -362,11 +389,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{ghcdir}/text-*/Data/Text/Fusion/*.hi
 %{_libdir}/%{ghcdir}/text-*/Data/Text/IO/*.hi
 %{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/*.hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Builder/*.hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Builder/Int/*.hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Builder/RealFloat/*.hi
 %{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Encoding/*.hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Unsafe/*.hi
 %{_libdir}/%{ghcdir}/text-*/HStext-*.o
 %{_libdir}/%{ghcdir}/text-*/libHStext-*.a
 %dir %{_libdir}/%{ghcdir}/transformers-*
 %dir %{_libdir}/%{ghcdir}/transformers-*/Control
+%dir %{_libdir}/%{ghcdir}/transformers-*/Control/Applicative
 %dir %{_libdir}/%{ghcdir}/transformers-*/Control/Monad
 %dir %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/IO
 %dir %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans
@@ -375,6 +407,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/Writer
 %dir %{_libdir}/%{ghcdir}/transformers-*/Data
 %dir %{_libdir}/%{ghcdir}/transformers-*/Data/Functor
+%{_libdir}/%{ghcdir}/transformers-*/Control/Applicative/*.hi
 %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/IO/*.hi
 %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/*.hi
 %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/RWS/*.hi
@@ -383,24 +416,112 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{ghcdir}/transformers-*/Data/Functor/*.hi
 %{_libdir}/%{ghcdir}/transformers-*/HStransformers-*.o
 %{_libdir}/%{ghcdir}/transformers-*/libHStransformers-*.a
+%dir %{_libdir}/%{ghcdir}/async-*
+%dir %{_libdir}/%{ghcdir}/async-*/Control
+%dir %{_libdir}/%{ghcdir}/async-*/Control/Concurrent
+%{_libdir}/%{ghcdir}/async-*/Control/Concurrent/*.hi
+%{_libdir}/%{ghcdir}/async-*/HSasync-*.o
+%{_libdir}/%{ghcdir}/async-*/libHSasync-*.a
+%dir %{_libdir}/%{ghcdir}/attoparsec-*
+%dir %{_libdir}/%{ghcdir}/attoparsec-*/Data
+%dir %{_libdir}/%{ghcdir}/attoparsec-*/Data/Attoparsec
+%dir %{_libdir}/%{ghcdir}/attoparsec-*/Data/Attoparsec/ByteString
+%dir %{_libdir}/%{ghcdir}/attoparsec-*/Data/Attoparsec/Internal
+%dir %{_libdir}/%{ghcdir}/attoparsec-*/Data/Attoparsec/Text
+%{_libdir}/%{ghcdir}/attoparsec-*/Data/*.hi
+%{_libdir}/%{ghcdir}/attoparsec-*/Data/Attoparsec/*.hi
+%{_libdir}/%{ghcdir}/attoparsec-*/Data/Attoparsec/ByteString/*.hi
+%{_libdir}/%{ghcdir}/attoparsec-*/Data/Attoparsec/Internal/*.hi
+%{_libdir}/%{ghcdir}/attoparsec-*/Data/Attoparsec/Text/*.hi
+%{_libdir}/%{ghcdir}/attoparsec-*/HSattoparsec-*.o
+%{_libdir}/%{ghcdir}/attoparsec-*/libHSattoparsec-*.a
+%dir %{_libdir}/%{ghcdir}/case-insensitive-*
+%dir %{_libdir}/%{ghcdir}/case-insensitive-*/Data
+%{_libdir}/%{ghcdir}/case-insensitive-*/Data/*.hi
+%{_libdir}/%{ghcdir}/case-insensitive-*/HScase-insensitive-*.o
+%{_libdir}/%{ghcdir}/case-insensitive-*/libHScase-insensitive-*.a
+%dir %{_libdir}/%{ghcdir}/hashable-*
+%dir %{_libdir}/%{ghcdir}/hashable-*/Data
+%{_libdir}/%{ghcdir}/hashable-*/Data/*.hi
+%{_libdir}/%{ghcdir}/hashable-*/HShashable-*.o
+%{_libdir}/%{ghcdir}/hashable-*/libHShashable-*.a
+%dir %{_libdir}/%{ghcdir}/primitive-*
+%dir %{_libdir}/%{ghcdir}/primitive-*/Control
+%dir %{_libdir}/%{ghcdir}/primitive-*/Control/Monad
+%dir %{_libdir}/%{ghcdir}/primitive-*/Data
+%dir %{_libdir}/%{ghcdir}/primitive-*/Data/Primitive
+%dir %{_libdir}/%{ghcdir}/primitive-*/Data/Primitive/Internal
+%{_libdir}/%{ghcdir}/primitive-*/Control/Monad/*.hi
+%{_libdir}/%{ghcdir}/primitive-*/Data/*.hi
+%{_libdir}/%{ghcdir}/primitive-*/Data/Primitive/*.hi
+%{_libdir}/%{ghcdir}/primitive-*/Data/Primitive/Internal/*.hi
+%{_libdir}/%{ghcdir}/primitive-*/HSprimitive-*.o
+%{_libdir}/%{ghcdir}/primitive-*/libHSprimitive-*.a
+%dir %{_libdir}/%{ghcdir}/primitive-*/include
+%{_libdir}/%{ghcdir}/primitive-*/include/primitive-memops.h
+%{_libdir}/%{ghcdir}/random-*/System/*.hi
+%dir %{_libdir}/%{ghcdir}/random-*
+%dir %{_libdir}/%{ghcdir}/random-*/System
+%{_libdir}/%{ghcdir}/random-*/HSrandom-*.o
+%{_libdir}/%{ghcdir}/random-*/libHSrandom-*.a
+%dir %{_libdir}/%{ghcdir}/split-*
+%dir %{_libdir}/%{ghcdir}/split-*/Data
+%dir %{_libdir}/%{ghcdir}/split-*/Data/List
+%dir %{_libdir}/%{ghcdir}/split-*/Data/List/Split
+%{_libdir}/%{ghcdir}/split-*/Data/List/*.hi
+%{_libdir}/%{ghcdir}/split-*/Data/List/Split/*.hi
+%{_libdir}/%{ghcdir}/split-*/HSsplit-*.o
+%{_libdir}/%{ghcdir}/split-*/libHSsplit-*.a
+%dir %{_libdir}/%{ghcdir}/unordered-containers-*
+%dir %{_libdir}/%{ghcdir}/unordered-containers-*/Data
+%dir %{_libdir}/%{ghcdir}/unordered-containers-*/Data/HashMap
+%{_libdir}/%{ghcdir}/unordered-containers-*/Data/*.hi
+%{_libdir}/%{ghcdir}/unordered-containers-*/Data/HashMap/*.hi
+%{_libdir}/%{ghcdir}/unordered-containers-*/HSunordered-containers-*.o
+%{_libdir}/%{ghcdir}/unordered-containers-*/libHSunordered-containers-*.a
+%dir %{_libdir}/%{ghcdir}/vector-*
+%dir %{_libdir}/%{ghcdir}/vector-*/Data
+%dir %{_libdir}/%{ghcdir}/vector-*/Data/Vector
+%dir %{_libdir}/%{ghcdir}/vector-*/Data/Vector/Fusion
+%dir %{_libdir}/%{ghcdir}/vector-*/Data/Vector/Fusion/Stream
+%dir %{_libdir}/%{ghcdir}/vector-*/Data/Vector/Generic
+%dir %{_libdir}/%{ghcdir}/vector-*/Data/Vector/Internal
+%dir %{_libdir}/%{ghcdir}/vector-*/Data/Vector/Primitive
+%dir %{_libdir}/%{ghcdir}/vector-*/Data/Vector/Storable
+%dir %{_libdir}/%{ghcdir}/vector-*/Data/Vector/Unboxed
+%{_libdir}/%{ghcdir}/vector-*/Data/*.hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/*.hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Fusion/*.hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Fusion/Stream/*.hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Generic/*.hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Internal/*.hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Primitive/*.hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Storable/*.hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Unboxed/*.hi
+%{_libdir}/%{ghcdir}/vector-*/HSvector-*.o
+%{_libdir}/%{ghcdir}/vector-*/libHSvector-*.a
+%dir %{_libdir}/%{ghcdir}/vector-*/include
+%{_libdir}/%{ghcdir}/vector-*/include/vector.h
 
 %files prof
 %defattr(644,root,root,755)
 %{_libdir}/%{ghcdir}/cgi-*/libHScgi-*_p.a
 %{_libdir}/%{ghcdir}/cgi-*/Network/CGI/*.p_hi
 %{_libdir}/%{ghcdir}/cgi-*/Network/*.p_hi
-%{_libdir}/%{ghcdir}/deepseq-*/Control/*.p_hi
-%{_libdir}/%{ghcdir}/deepseq-*/libHSdeepseq-*_p.a
 %{_libdir}/%{ghcdir}/fgl-*/Data/Graph/Inductive/Internal/*.p_hi
 %{_libdir}/%{ghcdir}/fgl-*/Data/Graph/Inductive/Monad/*.p_hi
 %{_libdir}/%{ghcdir}/fgl-*/Data/Graph/Inductive/*.p_hi
 %{_libdir}/%{ghcdir}/fgl-*/Data/Graph/Inductive/Query/*.p_hi
 %{_libdir}/%{ghcdir}/fgl-*/Data/Graph/*.p_hi
 %{_libdir}/%{ghcdir}/fgl-*/libHSfgl-*_p.a
+%{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT/Raw/*.p_hi
 %{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT/Callbacks/*.p_hi
 %{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/GLUT/*.p_hi
 %{_libdir}/%{ghcdir}/GLUT-*/Graphics/UI/*.p_hi
 %{_libdir}/%{ghcdir}/GLUT-*/libHSGLUT-*_p.a
+%{_libdir}/%{ghcdir}/GLURaw-*/Graphics/Rendering/GLU/*.p_hi
+%{_libdir}/%{ghcdir}/GLURaw-*/Graphics/Rendering/GLU/Raw/*.p_hi
+%{_libdir}/%{ghcdir}/GLURaw-*/libHSGLURaw-*_p.a
 %{_libdir}/%{ghcdir}/haskell-src-*/Language/Haskell/*.p_hi
 %{_libdir}/%{ghcdir}/haskell-src-*/libHShaskell-src-*_p.a
 %{_libdir}/%{ghcdir}/html-*/libHShtml-*_p.a
@@ -409,6 +530,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{ghcdir}/HTTP-*/libHSHTTP-*_p.a
 %{_libdir}/%{ghcdir}/HTTP-*/Network/HTTP/*.p_hi
 %{_libdir}/%{ghcdir}/HTTP-*/Network/*.p_hi
+%{_libdir}/%{ghcdir}/HTTP-*/*.p_hi
 %{_libdir}/%{ghcdir}/HUnit-*/libHSHUnit-*_p.a
 %{_libdir}/%{ghcdir}/HUnit-*/Test/HUnit/*.p_hi
 %{_libdir}/%{ghcdir}/HUnit-*/Test/*.p_hi
@@ -431,7 +553,18 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GLU/*.p_hi
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/*.p_hi
 %{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/*.p_hi
+%{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/FramebufferObjects/*.p_hi
+%{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/QueryUtils/*.p_hi
+%{_libdir}/%{ghcdir}/OpenGL-*/Graphics/Rendering/OpenGL/GL/Shaders/*.p_hi
 %{_libdir}/%{ghcdir}/OpenGL-*/libHSOpenGL-*_p.a
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/*.p_hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/*.p_hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/ARB/*.p_hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/ARB/Compatibility/*.p_hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/Core31/*.p_hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/EXT/*.p_hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/Graphics/Rendering/OpenGL/Raw/NV/*.p_hi
+%{_libdir}/%{ghcdir}/OpenGLRaw-*/libHSOpenGLRaw-*_p.a
 %{_libdir}/%{ghcdir}/parallel-*/Control/Parallel/*.p_hi
 %{_libdir}/%{ghcdir}/parallel-*/Control/*.p_hi
 %{_libdir}/%{ghcdir}/parallel-*/libHSparallel-*_p.a
@@ -467,9 +600,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{ghcdir}/text-*/Data/Text/Encoding/*.p_hi
 %{_libdir}/%{ghcdir}/text-*/Data/Text/Fusion/*.p_hi
 %{_libdir}/%{ghcdir}/text-*/Data/Text/IO/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Builder/RealFloat/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Builder/Int/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Builder/*.p_hi
 %{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/Encoding/*.p_hi
 %{_libdir}/%{ghcdir}/text-*/Data/Text/Lazy/*.p_hi
 %{_libdir}/%{ghcdir}/text-*/Data/Text/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/Data/Text/Unsafe/*.p_hi
+%{_libdir}/%{ghcdir}/text-*/libHStext-*_p.a
 %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/IO/*.p_hi
 %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/*.p_hi
 %{_libdir}/%{ghcdir}/transformers-*/Control/Monad/Trans/RWS/*.p_hi
@@ -485,3 +623,42 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{ghcdir}/zlib-*/Codec/Compression/*.p_hi
 %{_libdir}/%{ghcdir}/zlib-*/Codec/Compression/Zlib/*.p_hi
 %{_libdir}/%{ghcdir}/zlib-*/libHSzlib-*_p.a
+%{_libdir}/%{ghcdir}/async-*/Control/Concurrent/*.p_hi
+%{_libdir}/%{ghcdir}/async-*/libHSasync-*_p.a
+%{_libdir}/%{ghcdir}/attoparsec-*/Data/*.p_hi
+%{_libdir}/%{ghcdir}/attoparsec-*/Data/Attoparsec/*.p_hi
+%{_libdir}/%{ghcdir}/attoparsec-*/Data/Attoparsec/ByteString/*.p_hi
+%{_libdir}/%{ghcdir}/attoparsec-*/Data/Attoparsec/Internal/*.p_hi
+%{_libdir}/%{ghcdir}/attoparsec-*/Data/Attoparsec/Text/*.p_hi
+%{_libdir}/%{ghcdir}/attoparsec-*/libHSattoparsec-*_p.a
+%{_libdir}/%{ghcdir}/case-insensitive-*/Data/*.p_hi
+%{_libdir}/%{ghcdir}/case-insensitive-*/libHScase-insensitive-*_p.a
+%{_libdir}/%{ghcdir}/hashable-*/Data/*.p_hi
+%{_libdir}/%{ghcdir}/hashable-*/libHShashable-*_p.a
+%{_libdir}/%{ghcdir}/parsec-*/Text/Parsec/Text/*.p_hi
+%{_libdir}/%{ghcdir}/primitive-*/Control/Monad/*.p_hi
+%{_libdir}/%{ghcdir}/primitive-*/Data/*.p_hi
+%{_libdir}/%{ghcdir}/primitive-*/Data/Primitive/*.p_hi
+%{_libdir}/%{ghcdir}/primitive-*/Data/Primitive/Internal/*.p_hi
+%{_libdir}/%{ghcdir}/primitive-*/libHSprimitive-*_p.a
+%{_libdir}/%{ghcdir}/random-*/System/*.p_hi
+%{_libdir}/%{ghcdir}/random-*/libHSrandom-*_p.a
+%{_libdir}/%{ghcdir}/split-*/Data/List/*.p_hi
+%{_libdir}/%{ghcdir}/split-*/Data/List/Split/*.p_hi
+%{_libdir}/%{ghcdir}/split-*/libHSsplit-*_p.a
+%{_libdir}/%{ghcdir}/syb-*/libHSsyb-*_p.a
+%{_libdir}/%{ghcdir}/transformers-*/Control/Applicative/*.p_hi
+%{_libdir}/%{ghcdir}/transformers-*/libHStransformers-*_p.a
+%{_libdir}/%{ghcdir}/unordered-containers-*/Data/HashMap/*.p_hi
+%{_libdir}/%{ghcdir}/unordered-containers-*/Data/*.p_hi
+%{_libdir}/%{ghcdir}/unordered-containers-*/libHSunordered-containers-*_p.a
+%{_libdir}/%{ghcdir}/vector-*/Data/*.p_hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Fusion/*.p_hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Fusion/Stream/*.p_hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/*.p_hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Generic/*.p_hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Internal/*.p_hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Primitive/*.p_hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Storable/*.p_hi
+%{_libdir}/%{ghcdir}/vector-*/Data/Vector/Unboxed/*.p_hi
+%{_libdir}/%{ghcdir}/vector-*/libHSvector-*_p.a
