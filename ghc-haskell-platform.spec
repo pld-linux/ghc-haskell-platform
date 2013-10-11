@@ -6,7 +6,7 @@
 Summary:	Comprehensive, robust development environment for programming in Haskell
 Name:		ghc-%{pkgname}
 Version:	2013.2.0.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Languages
 Source0:	http://lambda.haskell.org/platform/download/%{version}/%{pkgname}-%{version}.tar.gz
@@ -77,6 +77,38 @@ stability of your code.
 Summary:	Profiling haskell-platform libraries for GHC
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Provides:	ghc-GLUT-prof = 2.4.0.0
+Provides:	ghc-GLURaw-prof = 1.3.0.0
+Provides:	ghc-HTTP-prof = 4000.2.8
+Provides:	ghc-HUnit-prof = 1.2.5.2
+Provides:	ghc-OpenGL-prof = 2.8.0.0
+Provides:	ghc-OpenGLRaw-prof = 1.3.0.0
+Provides:	ghc-QuickCheck-prof = 2.6
+Provides:	ghc-async-prof = 2.0.1.4
+Provides:	ghc-attoparsec-prof = 0.10.4.0
+Provides:	ghc-case-insensitive-prof = 1.0.0.1
+Provides:	ghc-cgi-prof = 3001.1.7.5
+Provides:	ghc-fgl-prof = 5.4.2.4
+Provides:	ghc-hashable-prof = 1.1.2.5
+Provides:	ghc-haskell-src-prof = 1.0.1.5
+Provides:	ghc-html-prof = 1.0.1.2
+Provides:	ghc-mtl-prof = 2.1.2
+Provides:	ghc-network-prof = 2.4.1.2
+Provides:	ghc-parallel-prof = 3.2.0.3
+Provides:	ghc-parsec-prof = 3.1.3
+Provides:	ghc-random-prof = 1.0.1.1
+Provides:	ghc-regex-base-prof = 0.93.2
+Provides:	ghc-regex-compat-prof = 0.95.1
+Provides:	ghc-regex-posix-prof = 0.95.2
+Provides:	ghc-split-prof = 0.2.2
+Provides:	ghc-stm-prof = 2.4.2
+Provides:	ghc-syb-prof = 0.4.0
+Provides:	ghc-text-prof = 0.11.3.1
+Provides:	ghc-transformers-prof = 0.3.0.0
+Provides:	ghc-unordered-containers-prof = 0.2.3.0
+Provides:	ghc-vector-prof = 0.10.0.1
+Provides:	ghc-xhtml-prof = 3000.2.1
+Provides:	ghc-zlib-prof = 0.5.4.1
 
 %description prof
 Profiling haskell-platform libraries for Glorious Glasgow Haskell
