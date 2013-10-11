@@ -6,7 +6,7 @@
 Summary:	Comprehensive, robust development environment for programming in Haskell
 Name:		ghc-%{pkgname}
 Version:	2013.2.0.0
-Release:	2
+Release:	3
 License:	BSD
 Group:		Development/Languages
 Source0:	http://lambda.haskell.org/platform/download/%{version}/%{pkgname}-%{version}.tar.gz
