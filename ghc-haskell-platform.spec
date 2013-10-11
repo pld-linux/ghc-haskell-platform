@@ -123,6 +123,7 @@ They should be installed when GHC's profiling subsystem is needed.
 
 %build
 %configure
+:>packages/installed.packages
 
 %{__make} VERBOSE="-v2" \
 	EXTRA_CONFIGURE_OPTS="-v2 \
