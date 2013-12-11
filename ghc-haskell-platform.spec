@@ -4,6 +4,7 @@
 #
 %define		pkgname	haskell-platform
 Summary:	Comprehensive, robust development environment for programming in Haskell
+Summary(pl.UTF-8):	Obszerne, bogate środowisko programistyczne dla Haskella
 Name:		ghc-%{pkgname}
 Version:	2013.2.0.0
 Release:	3
@@ -18,7 +19,7 @@ BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-glut-devel
 BuildRequires:	bash
 BuildRequires:	ghc >= 7.6.2
-BuildRequires:	ghc-prof
+BuildRequires:	ghc-prof >= 7.6.2
 BuildRequires:	hscolour >= 1.8
 BuildRequires:	zlib-devel
 BuildRequires:	rpmbuild(macros) >= 1.608
@@ -73,8 +74,17 @@ provides a comprehensive, standard base for commercial and open
 source Haskell development that maximises interoperability and
 stability of your code.
 
+%description -l pl.UTF-8
+Haskell Platform to obszerne, bogate środowisko programistyczne dla
+Haskella. Nowym użytkownikom platforma ułatwia rozpoczęcie pracy z
+pełnym środowiskiem programistycznym Haskella. Doświadczonym
+użytkownikom zapewnia obszerną podstawę do komercyjnego lub otwartego
+programowania w Haskellu, maksymalizując przenośność i stabilność
+kodu.
+
 %package prof
 Summary:	Profiling haskell-platform libraries for GHC
+Summary(pl.UTF-8):	Biblioteki profilujące haskell-platform dla GHC
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Provides:	ghc-GLUT-prof = 2.4.0.0
@@ -112,8 +122,13 @@ Provides:	ghc-zlib-prof = 0.5.4.1
 
 %description prof
 Profiling haskell-platform libraries for Glorious Glasgow Haskell
-Compilation System (GHC).
-They should be installed when GHC's profiling subsystem is needed.
+Compilation System (GHC). They should be installed when GHC's
+profiling subsystem is needed.
+
+%description prof -l pl.UTF-8
+Biblioteki profilujące haskell-platform dla systemu GHC (Glorious
+Glasgow Haskell Compilation System). Powinny być zainstalowane, jeśli
+potrzebny jest system profilujący GHC.
 
 %prep
 %setup -q -n %{pkgname}-%{version}
@@ -125,7 +140,8 @@ They should be installed when GHC's profiling subsystem is needed.
 %configure
 :>packages/installed.packages
 
-%{__make} VERBOSE="-v2" \
+%{__make} \
+	VERBOSE="-v2" \
 	EXTRA_CONFIGURE_OPTS="-v2 \
 		--prefix=%{_prefix} \
 		--libdir=%{_libdir} \
@@ -136,7 +152,8 @@ They should be installed when GHC's profiling subsystem is needed.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}/%{ghcdir}/package.conf.d
 
-%{__make} install VERBOSE="-v2" \
+%{__make} install \
+	VERBOSE="-v2" \
 	ghcdir=%{ghcdir} \
 	DESTDIR=$RPM_BUILD_ROOT
 
