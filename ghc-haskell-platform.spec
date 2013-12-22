@@ -43,7 +43,7 @@ Summary:	Comprehensive, robust development environment for programming in Haskel
 Summary(pl.UTF-8):	Obszerne, bogate środowisko programistyczne dla Haskella
 Name:		ghc-%{pkgname}
 Version:	2013.2.0.0
-Release:	3
+Release:	4
 License:	BSD
 Group:		Development/Languages
 Source0:	http://lambda.haskell.org/platform/download/%{version}/%{pkgname}-%{version}.tar.gz
